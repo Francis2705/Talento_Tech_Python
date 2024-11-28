@@ -1,3 +1,42 @@
+#pasar todo a clases
+#hacer todo con modelos de autos
+#hacer que tenga id, pero que cuando busque el auto, busque por patente
+#un crud de autos y otro crud de repuestos de autos
+#documentar los metodos
+#la bd se va a llamar "taller_fmb.db"
+#hacer el README.txt explicando toda la funcionalidad
+
+#Atributos del auto#
+
+#id (primary key, autoincremental)
+#patente (string, unic, not null) #validar que sean 6 o 7 caracteres alfanumericos
+#marca (string, not null)
+#modelo (string, not null)
+#chasis (string, not null)
+#cantidad_puertas (int, not null)
+
+#Atributos de los repuestos#
+
+#id (primary key, autoincremental)
+#nombre (string, unic, not null)
+#descripcion (string, not null)
+#cantidad (int, not null)
+#precio (float, not null)
+#categoria \interior o exterior del auto/ (string, not null) 
+
+#Requerimientos#
+
+#permitir actualizar por el id (en caso de los repuestos, y por patente en caso de los autos)
+#permitir elimimar por el id (en caso de los repuestos, y por patente en caso de los autos)
+#permitir buscar por el id (en caso de los repuestos, y por patente en caso de los autos) y mostrar todos los datos del objeto
+#consultar reporte de bajo stock (para los repuestos, todos los q tengan menos de 20 de cantidad)
+
+#Librerias#
+
+#colorama (para darle color a la terminal)
+#sqlite3 (para la bd)
+#regex (para cualquier posible validacion)
+
 from funciones import *
 
 menu = ['1.Agregar un producto', '2.Modificar un producto', 
