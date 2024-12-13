@@ -1,28 +1,6 @@
-#pasar todo a clases
-#hacer todo con modelos de autos
-#hacer que tenga id, pero que cuando busque el auto, busque por patente
-#un crud de autos y otro crud de repuestos de autos
 #documentar los metodos
-#la bd se va a llamar "taller_fmb.db"
 #hacer el README.txt explicando toda la funcionalidad
-
-#Atributos del auto#
-
-#id (primary key, autoincremental)
-#patente (string, unic, not null) #validar que sean 6 o 7 caracteres alfanumericos
-#marca (string, not null)
-#modelo (string, not null)
-#chasis (string, not null)
-#cantidad_puertas (int, not null)
-
-#Atributos de los repuestos#
-
-#id (primary key, autoincremental)
-#nombre (string, unic, not null)
-#descripcion (string, not null)
-#cantidad (int, not null)
-#precio (float, not null)
-#categoria \interior o exterior del auto/ (string, not null) 
+#modularizar el codigo
 
 #Requerimientos#
 
@@ -34,64 +12,90 @@
 #Librerias#
 
 #colorama (para darle color a la terminal)
-#sqlite3 (para la bd)
-#regex (para cualquier posible validacion)
 
 from funciones import *
 
-menu = ['1.Agregar un producto', '2.Modificar un producto', 
-        '3.Eliminar un producto', '4.Mostrar un producto', '5.Mostrar todos los productos', '6.Salir']
-lista_productos = []
+menu_principal = ['\nBienvenido! Elija la opcion en la cual quiera operar:\n1.Autos', '2.Repuestos', '3.Salir']
+menu_autos = ['1.Agregar un auto', '2.Modificar un auto', '3.Eliminar un auto', '4.Mostrar un auto', '5.Mostrar todos los autos', '6.Salir']
+menu_repuestos = ['1.Agregar un repuesto', '2.Modificar un repuesto', '3.Eliminar un repuesto', '4.Mostrar un repuesto', 
+                '5.Mostrar todos los repuestos', '6.Consultar stock bajo', '7.Salir']
+
+lista_autos = traer_autos()
+lista_repuestos = []
 
 while True:
-    respuesta = manejar_menu(menu)
+    respuesta = manejar_menu(menu_principal)
     match respuesta:
-        case 1:
-            nombre = pedir_nombre("Ingrese el nombre del producto: ")
-            cantidad = pedir_cantidad("Ingrese la cantidad del producto: ")
-            producto = crear_producto(nombre, cantidad)
+        case 1: #listo
+            while True:
+                respuesta = manejar_menu(menu_autos)
+                match respuesta:
+                    case 1: #agregar (listo)
+                        patente = pedir_patente(True)
+                        marca = pedir_marca()
+                        modelo = pedir_modelo()
+                        anio = pedir_anio()
+                        chasis = pedir_chasis()
+                        cantidad_puertas = pedir_cantidad_puertas()
 
-            if agregar_producto(lista_productos, producto):
-                print("Producto agregado con exito!")
-            else:
-                print("Error! Producto repetido!")
+                        auto = Auto(0, patente, marca, modelo, anio, chasis, cantidad_puertas)
+                        auto.agregar()
+                        lista_autos.append(auto)
+                        print('Auto agregado exitosamente!')
+                    case 2: #modificar (listo)
+                        auto = pedir_patente(False)
+                        if auto:
+                            marca = pedir_marca()
+                            modelo = pedir_modelo()
+                            anio = pedir_anio()
+                            chasis = pedir_chasis()
+                            cantidad_puertas = pedir_cantidad_puertas()
+
+                            auto = Auto(auto[0], auto[1], auto[2], auto[3], auto[4], auto[5], auto[6])
+                            auto.modificar(marca, modelo, anio, chasis, cantidad_puertas)
+                            modificar_auto(lista_autos, auto.patente, auto)
+                            print('Modificacion exitosa!')
+                        else:
+                            print('Error! Patente inexistente.')
+                    case 3: #eliminar (listo)
+                        auto = pedir_patente(False)
+                        if auto:
+                            auto = Auto(auto[0], auto[1], auto[2], auto[3], auto[4], auto[5], auto[6])
+                            auto.eliminar()
+                            eliminar_auto(lista_autos, auto)
+                            print('Eliminacion exitosa!')
+                        else:
+                            print('Error! Patente inexistente.')
+                    case 4: #mostrar uno (listo)
+                        auto = pedir_patente(False)
+                        if auto:
+                            auto = Auto(auto[0], auto[1], auto[2], auto[3], auto[4], auto[5], auto[6])
+                            auto.mostrar()
+                        else:
+                            print('Error! Patente inexistente.')
+                    case 5: #mostrar todos (listo)
+                        lista_autos.clear()
+                        lista_autos = traer_autos()
+                        mostrar_autos(lista_autos)
+                    case 6:
+                        break
         case 2:
-            if len(lista_productos) == 0:
-                print("Error, no hay productos en la lista para modificar")
-            else:
-                nombre_viejo = pedir_nombre("Ingrese el nombre del producto a modificar: ")
-                nombre_nuevo = pedir_nombre("Ingrese el nuevo nombre del producto: ")
-                cantidad_nueva = pedir_cantidad("Ingrese la nueva cantidad del producto: ")
-                nuevo_producto = crear_producto(nombre_nuevo, cantidad_nueva)
-
-                if modificar_producto(lista_productos, nombre_viejo, nuevo_producto):
-                    print("Producto modificado con exito!")
-                else:
-                    print("Error! Producto inexistente!")
+            while True:
+                respuesta = manejar_menu(menu_repuestos)
+                match respuesta:
+                    case 1:
+                        pass #agregar
+                    case 2:
+                        pass #modificar
+                    case 3:
+                        pass #eliminar
+                    case 4:
+                        pass #mostrar uno
+                    case 5:
+                        pass #mostrar todos
+                    case 6:
+                        pass #consultar bajo stock
+                    case 7:
+                        break
         case 3:
-            if len(lista_productos) == 0:
-                print("Error, no hay productos en la lista para eliminar")
-            else:
-                nombre_eliminado = pedir_nombre("Ingrese el nombre del producto a eliminar: ")
-
-                if eliminar_producto(lista_productos, nombre_eliminado):
-                    print("Producto eliminado con exito!")
-                else:
-                    print("Error! Producto inexistente!")
-        case 4:
-            if len(lista_productos) == 0:
-                print("Error, no hay productos en la lista para mostrar")
-            else:
-                nombre_buscado = pedir_nombre("Ingrese el nombre del producto a mostrar: ")
-                flag_existe, descripcion = mostrar_producto(lista_productos, nombre_buscado)
-                if flag_existe:
-                    print(descripcion)
-                else:
-                    print("Error! Producto inexistente!")
-        case 5:
-            if len(lista_productos) == 0:
-                print("Error, no hay productos en la lista para mostrar")
-            else:
-                mostrar_productos(lista_productos)
-        case 6:
             break
