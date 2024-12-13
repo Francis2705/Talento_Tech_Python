@@ -4,6 +4,7 @@
 
 #Requerimientos#
 
+
 #permitir actualizar por el id (en caso de los repuestos, y por patente en caso de los autos)
 #permitir elimimar por el id (en caso de los repuestos, y por patente en caso de los autos)
 #permitir buscar por el id (en caso de los repuestos, y por patente en caso de los autos) y mostrar todos los datos del objeto
