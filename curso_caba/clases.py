@@ -9,7 +9,7 @@ class Auto:
         self.anio = anio
         self.chasis = chasis
         self.cantidad_puertas = cantidad_puertas
-    def mostrar(self): #listo
+    def mostrar(self):
         info_auto = f'''
 --------------------------------
     ID: {self.id}
@@ -21,7 +21,7 @@ class Auto:
     Cantidad de puertas: {self.cantidad_puertas}
 --------------------------------'''
         print(info_auto)
-    def agregar(self): #listo
+    def agregar(self):
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -33,7 +33,7 @@ class Auto:
         self.id = cursor.lastrowid #asigno el id creado por la bd
 
         conexion.close()
-    def modificar(self, marca, modelo, anio, chasis, cantidad_puertas): #listo
+    def modificar(self, marca, modelo, anio, chasis, cantidad_puertas):
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -43,7 +43,7 @@ class Auto:
         conexion.commit()
 
         conexion.close()
-    def eliminar(self): #listo
+    def eliminar(self):
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -53,13 +53,6 @@ class Auto:
 
         conexion.close()
 
-#id (primary key, autoincremental)
-#nombre (string, unic, not null)
-#descripcion (string, not null)
-#cantidad (int, not null)
-#precio (float, not null)
-#categoria \interior o exterior del auto/ (string, not null)
-
 class Repuesto:
     def __init__(self, id, nombre, descripcion, cantidad, precio, categoria):
         self.id = id
@@ -68,7 +61,7 @@ class Repuesto:
         self.cantidad = cantidad
         self.precio = precio
         self.categoria = categoria
-    def mostrar_repuesto(self):
+    def mostrar(self):
         info_repuesto = f'''
 --------------------------------
     ID: {self.id}
@@ -79,3 +72,34 @@ class Repuesto:
     Categoria: {self.categoria}
 --------------------------------'''
         print(info_repuesto)
+    def agregar(self):
+        conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+        cursor = conexion.cursor()
+
+        cursor.execute('''INSERT INTO Repuestos (nombre, descripcion, cantidad, precio, categoria) VALUES (?, ?, ?, ?, ?)''', 
+                    (self.nombre, self.descripcion, self.cantidad, self.precio, self.categoria))
+
+        conexion.commit()
+
+        self.id = cursor.lastrowid #asigno el id creado por la bd
+
+        conexion.close()
+    def modificar(self, nombre, descripcion, cantidad, precio, categoria):
+        conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+        cursor = conexion.cursor()
+
+        cursor.execute('''UPDATE Repuestos SET nombre = ?, descripcion = ?, cantidad = ?, precio = ?, categoria = ?
+                    WHERE id = ?''', (nombre, descripcion, cantidad, precio, categoria, self.id))
+
+        conexion.commit()
+
+        conexion.close()
+    def eliminar(self):
+        conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+        cursor = conexion.cursor()
+
+        cursor.execute('''DELETE FROM Repuestos WHERE id = ?''', (self.id,))
+
+        conexion.commit()
+
+        conexion.close()

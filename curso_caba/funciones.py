@@ -1,7 +1,8 @@
 import re
 from clases import *
 
-def manejar_menu(menu: list): #listo
+#Funciones varias
+def manejar_menu(menu: list):
     contador = 0
     for opcion in menu:
         print(opcion)
@@ -14,8 +15,7 @@ def manejar_menu(menu: list): #listo
             return int(respuesta)
         except ValueError:
             print("Error, ingrese un numero valido!")
-
-def traer_autos(): #listo
+def traer_autos():
     lista_autos = []
     conexion = sqlite3.connect('curso_caba/taller_fmb.db')
     cursor = conexion.cursor()
@@ -28,9 +28,22 @@ def traer_autos(): #listo
         lista_autos.append(auto)
 
     return lista_autos
+def traer_repuestos():
+    lista_repuestos = []
+    conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+    cursor = conexion.cursor()
+
+    cursor.execute("SELECT * FROM Repuestos")
+    registros = cursor.fetchall()
+
+    for r in registros:
+        repuesto = Repuesto(r[0], r[1], r[2], r[3], r[4], r[5])
+        lista_repuestos.append(repuesto)
+
+    return lista_repuestos
 
 #Pedido de datos (auto)
-def pedir_patente(agregar: bool): #listo
+def pedir_patente(agregar: bool):
     if agregar:
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
@@ -79,14 +92,11 @@ def pedir_patente(agregar: bool): #listo
             if patente == a[1]:
                 return a
         return False
-
-def pedir_marca(): #listo
+def pedir_marca():
     return input('Ingrese la marca: ').strip()
-
-def pedir_modelo(): #listo
+def pedir_modelo():
     return input('Ingrese el modelo: ').strip()
-
-def pedir_anio(): #listo
+def pedir_anio():
     anio = input('Ingrese el año: ').strip()
 
     while True:
@@ -94,8 +104,7 @@ def pedir_anio(): #listo
             return anio
         else:
             anio = input('Error. Ingrese un año valido: ').strip()
-
-def pedir_chasis(): #listo
+def pedir_chasis():
     chasis = input('Ingrese el chasis: ').strip()
 
     while True:
@@ -103,8 +112,7 @@ def pedir_chasis(): #listo
             return chasis
         else:
             chasis = input('Error. Ingrese un chasis valido, tiene que ser alfanumerico: ').strip()
-
-def pedir_cantidad_puertas(): #listo
+def pedir_cantidad_puertas():
     while True:
         try:
             cantidad_puertas = int(input("Ingrese la cantidad de puertas: "))
@@ -115,16 +123,89 @@ def pedir_cantidad_puertas(): #listo
             print("Error, ingrese un numero valido!")
 
 #CRUD AUTO
-def modificar_auto(lista_autos: list, patente: str, auto: Auto): #listo
+def modificar_auto(lista_autos: list, patente: str, auto: Auto):
     for i, a in enumerate(lista_autos): #i = indice, a = Auto
         if a.patente == patente:
             lista_autos[i] = auto
-
-def eliminar_auto(lista_autos: list, auto: Auto): #listo
+def eliminar_auto(lista_autos: list, auto: Auto):
     for a in lista_autos:
         if a.patente == auto.patente:
             lista_autos.remove(a)
-
-def mostrar_autos(lista_autos: list): #listo
+def mostrar_autos(lista_autos: list):
     for a in lista_autos:
         a.mostrar()
+
+#Pedido de datos (repuesto)
+def pedir_nombre():
+    return input('Ingrese el nombre: ').strip().lower()
+def pedir_descripcion():
+    return input('Ingrese la descripcion: ').strip().lower()
+def pedir_cantidad():
+    while True:
+        try:
+            cantidad = int(input("Ingrese la cantidad: "))
+            while cantidad <= 0:
+                cantidad = int(input(f"Error. Ingrese un numero mayor que 0: "))
+            return int(cantidad)
+        except ValueError:
+            print("Error, ingrese un numero valido!")
+def pedir_precio():
+    while True:
+        try:
+            precio = float(input("Ingrese el precio: "))
+            while precio <= 0:
+                precio = float(input(f"Error. Ingrese un numero mayor que 0: "))
+            return float(precio)
+        except ValueError:
+            print("Error, ingrese un numero valido!")
+def pedir_categoria():
+    categoria = input("Ingrese la categoria (interior o exterior): ").lower().strip()
+    while categoria != 'interior' and categoria != 'exterior':
+        categoria = input("Error! Ingrese una categoria valida (interior o exterior): ").lower().strip()
+    return categoria
+def pedir_repuesto():
+    while True:
+        try:
+            id = int(input("Ingrese el id del repuesto: "))
+            while id <= 0:
+                id = int(input(f"Error. Ingrese un numero mayor que 0: "))
+        except ValueError:
+            print("Error, ingrese un numero valido!")
+
+        conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+        cursor = conexion.cursor()
+
+        cursor.execute("SELECT * FROM Repuestos")
+        registros = cursor.fetchall()
+        conexion.close()
+
+        for r in registros:
+            if id == r[0]:
+                return r
+        return False
+
+#CRUD REPUESTO
+def modificar_repuesto(lista_repuestos: list, id: int, repuesto: Repuesto):
+    for i, r in enumerate(lista_repuestos): #i = indice, r = Repuesto
+        if r.id == id:
+            lista_repuestos[i] = repuesto
+def eliminar_repuesto(lista_repuestos: list, repuesto: Repuesto):
+    for r in lista_repuestos:
+        if r.id == repuesto.id:
+            lista_repuestos.remove(r)
+def mostrar_repuestos(lista_repuesto: list):
+    for r in lista_repuesto:
+        r.mostrar()
+def reporte_bajo_stock():
+    lista_repuestos_bajo_stock = []
+    conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+    cursor = conexion.cursor()
+
+    cursor.execute("SELECT * FROM Repuestos WHERE cantidad < 20")
+    registros = cursor.fetchall()
+
+    for r in registros:
+        repuesto = Repuesto(r[0], r[1], r[2], r[3], r[4], r[5])
+        lista_repuestos_bajo_stock.append(repuesto)
+
+    return lista_repuestos_bajo_stock
