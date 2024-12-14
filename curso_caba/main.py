@@ -1,11 +1,13 @@
 #documentar los metodos
 #hacer el README explicando toda la funcionalidad
 #modularizar el codigo
-#usar colorama (para darle color a la terminal)
 
 from funciones import *
 
-menu_principal = ['\nBienvenido! Elija la opcion en la cual quiera operar:\n1.Autos', '2.Repuestos', '3.Salir']
+init() #inicializo colorama
+print(Style.BRIGHT + 'Bienvenido! Elija la opcion en la cual quiera operar:' + Style.RESET_ALL)
+
+menu_principal = ['1.Autos', '2.Repuestos', '3.Salir']
 menu_autos = ['1.Agregar un auto', '2.Modificar un auto', '3.Eliminar un auto', '4.Mostrar un auto', '5.Mostrar todos los autos', '6.Salir']
 menu_repuestos = ['1.Agregar un repuesto', '2.Modificar un repuesto', '3.Eliminar un repuesto', '4.Mostrar un repuesto', 
                 '5.Mostrar todos los repuestos', '6.Consultar stock bajo', '7.Salir']
@@ -31,7 +33,7 @@ while True:
                         auto = Auto(0, patente, marca, modelo, anio, chasis, cantidad_puertas)
                         auto.agregar()
                         lista_autos.append(auto)
-                        print('Auto agregado exitosamente!')
+                        print(Fore.GREEN + 'Auto agregado exitosamente!' + Style.RESET_ALL)
                     case 2:
                         auto = pedir_patente(False)
                         if auto:
@@ -46,23 +48,23 @@ while True:
                             modificar_auto(lista_autos, auto.patente, auto)
                             print('Modificacion exitosa!')
                         else:
-                            print('Error! Patente inexistente.')
+                            print(Fore.RED + 'Error! Patente inexistente.' + Style.RESET_ALL)
                     case 3:
                         auto = pedir_patente(False)
                         if auto:
                             auto = Auto(auto[0], auto[1], auto[2], auto[3], auto[4], auto[5], auto[6])
                             auto.eliminar()
                             eliminar_auto(lista_autos, auto)
-                            print('Eliminacion exitosa!')
+                            print(Fore.GREEN + 'Eliminacion exitosa!' + Style.RESET_ALL)
                         else:
-                            print('Error! Patente inexistente.')
+                            print(Fore.RED + 'Error! Patente inexistente.' + Style.RESET_ALL)
                     case 4:
                         auto = pedir_patente(False)
                         if auto:
                             auto = Auto(auto[0], auto[1], auto[2], auto[3], auto[4], auto[5], auto[6])
                             auto.mostrar()
                         else:
-                            print('Error! Patente inexistente.')
+                            print(Fore.RED + 'Error! Patente inexistente.' + Style.RESET_ALL)
                     case 5:
                         lista_autos.clear()
                         lista_autos = traer_autos()
@@ -83,7 +85,7 @@ while True:
                         repuesto = Repuesto(0, nombre, descripcion, cantidad, precio, categoria)
                         repuesto.agregar()
                         lista_repuestos.append(repuesto)
-                        print('Repuesto agregado exitosamente!')
+                        print(Fore.GREEN + 'Repuesto agregado exitosamente!' + Style.RESET_ALL)
                     case 2:
                         repuesto = pedir_repuesto()
 
@@ -97,9 +99,9 @@ while True:
                             repuesto = Repuesto(repuesto[0], repuesto[1], repuesto[2], repuesto[3], repuesto[4], repuesto[5])
                             repuesto.modificar(nombre, descripcion, cantidad, precio, categoria)
                             modificar_repuesto(lista_repuestos, repuesto.id, repuesto)
-                            print('Modificacion exitosa!')
+                            print(Fore.GREEN + 'Modificacion exitosa!' + Style.RESET_ALL)
                         else:
-                            print('Error! Repuesto inexistente.')
+                            print(Fore.RED + 'Error! Repuesto inexistente.' + Style.RESET_ALL)
                     case 3:
                         repuesto = pedir_repuesto()
 
@@ -107,9 +109,9 @@ while True:
                             repuesto = Repuesto(repuesto[0], repuesto[1], repuesto[2], repuesto[3], repuesto[4], repuesto[5])
                             repuesto.eliminar()
                             eliminar_repuesto(lista_repuestos, repuesto)
-                            print('Eliminacion exitosa!')
+                            print(Fore.GREEN + 'Eliminacion exitosa!' + Style.RESET_ALL)
                         else:
-                            print('Error! Repuesto inexistente.')
+                            print(Fore.RED + 'Error! Repuesto inexistente.' + Style.RESET_ALL)
                     case 4:
                         repuesto = pedir_repuesto()
 
@@ -117,7 +119,7 @@ while True:
                             repuesto = Repuesto(repuesto[0], repuesto[1], repuesto[2], repuesto[3], repuesto[4], repuesto[5])
                             repuesto.mostrar()
                         else:
-                            print('Error! Repuesto inexistente.')
+                            print(Fore.RED + 'Error! Repuesto inexistente.' + Style.RESET_ALL)
                     case 5:
                         lista_repuestos.clear()
                         lista_repuestos = traer_repuestos()

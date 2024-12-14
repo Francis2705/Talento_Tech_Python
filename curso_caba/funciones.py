@@ -1,5 +1,6 @@
 import re
 from clases import *
+from colorama import *
 
 #Funciones varias
 def manejar_menu(menu: list):
@@ -11,10 +12,10 @@ def manejar_menu(menu: list):
         try:
             respuesta = int(input("Ingrese una opcion: "))
             while respuesta > contador or respuesta <= 0:
-                respuesta = int(input(f"Error. Ingrese un numero del 1 al {contador}: "))
+                respuesta = int(input(Fore.RED + f"Error. Ingrese un numero del 1 al {contador}: " + Style.RESET_ALL))
             return int(respuesta)
         except ValueError:
-            print("Error, ingrese un numero valido!")
+            print(Fore.RED + "Error, ingrese un numero valido!" + Style.RESET_ALL)
 def traer_autos():
     lista_autos = []
     conexion = sqlite3.connect('curso_caba/taller_fmb.db')
@@ -56,19 +57,19 @@ def pedir_patente(agregar: bool):
 
             if re.fullmatch(r"[A-Z]{3}\d{3}", patente): #validar formato de 6 caracteres (AAA000)
                 if patente in patentes_existentes:
-                    print("Error. La patente ya existe en la base de datos. Intente nuevamente.\n")
+                    print(Fore.RED + "Error. La patente ya existe en la base de datos. Intente nuevamente.\n" + Style.RESET_ALL)
                     continue
                 conexion.close()
                 return patente
 
             if re.fullmatch(r"[A-Z]{2}\s?\d{3}\s?[A-Z]{2}", patente): #validar formato de 7 caracteres (AA000AA)
                 if patente in patentes_existentes:
-                    print("Error. La patente ya existe en la base de datos. Intente nuevamente.\n")
+                    print(Fore.RED + "Error. La patente ya existe en la base de datos. Intente nuevamente.\n" + Style.RESET_ALL)
                     continue
                 conexion.close()
                 return patente
 
-            print("Error. Formato inválido. Intente nuevamente.\n")
+            print(Fore.RED + "Error. Formato inválido. Intente nuevamente.\n" + Style.RESET_ALL)
     else:
         while True:
             patente = input("Ingrese la patente del auto: ").strip().upper().replace(" ", "")
@@ -79,7 +80,7 @@ def pedir_patente(agregar: bool):
             if re.fullmatch(r"[A-Z]{2}\s?\d{3}\s?[A-Z]{2}", patente): #validar formato de 7 caracteres (AA000AA)
                 break
 
-            print("Error. Formato inválido. Intente nuevamente.\n")
+            print(Fore.RED + "Error. Formato inválido. Intente nuevamente.\n" + Style.RESET_ALL)
 
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
@@ -103,7 +104,7 @@ def pedir_anio():
         if len(anio) == 4 and anio.isdigit() and int(anio) >= 1970 and int(anio) <= 2024:
             return anio
         else:
-            anio = input('Error. Ingrese un año valido: ').strip()
+            anio = input(Fore.RED + 'Error. Ingrese un año valido: ' + Style.RESET_ALL).strip()
 def pedir_chasis():
     chasis = input('Ingrese el chasis: ').strip()
 
@@ -111,16 +112,16 @@ def pedir_chasis():
         if any(c.isalpha() for c in chasis) and any(c.isdigit() for c in chasis):
             return chasis
         else:
-            chasis = input('Error. Ingrese un chasis valido, tiene que ser alfanumerico: ').strip()
+            chasis = input(Fore.RED + 'Error. Ingrese un chasis valido, tiene que ser alfanumerico: ' + Style.RESET_ALL).strip()
 def pedir_cantidad_puertas():
     while True:
         try:
             cantidad_puertas = int(input("Ingrese la cantidad de puertas: "))
             while cantidad_puertas <= 1 or cantidad_puertas >= 10:
-                cantidad_puertas = int(input(f"Error. Ingrese un numero del 2 al 9: "))
+                cantidad_puertas = int(input(Fore.RED + "Error. Ingrese un numero del 2 al 9: " + Style.RESET_ALL))
             return int(cantidad_puertas)
         except ValueError:
-            print("Error, ingrese un numero valido!")
+            print(Fore.RED + "Error, ingrese un numero valido!" + Style.RESET_ALL)
 
 #CRUD AUTO
 def modificar_auto(lista_autos: list, patente: str, auto: Auto):
@@ -145,32 +146,33 @@ def pedir_cantidad():
         try:
             cantidad = int(input("Ingrese la cantidad: "))
             while cantidad <= 0:
-                cantidad = int(input(f"Error. Ingrese un numero mayor que 0: "))
+                cantidad = int(input(Fore.RED + "Error. Ingrese un numero mayor que 0: " + Style.RESET_ALL))
             return int(cantidad)
         except ValueError:
-            print("Error, ingrese un numero valido!")
+            print(Fore.RED + "Error, ingrese un numero valido!" + Style.RESET_ALL)
 def pedir_precio():
     while True:
         try:
             precio = float(input("Ingrese el precio: "))
             while precio <= 0:
-                precio = float(input(f"Error. Ingrese un numero mayor que 0: "))
+                precio = float(input(Fore.RED + "Error. Ingrese un numero mayor que 0: " + Style.RESET_ALL))
             return float(precio)
         except ValueError:
-            print("Error, ingrese un numero valido!")
+            print(Fore.RED + "Error, ingrese un numero valido!" + Style.RESET_ALL)
 def pedir_categoria():
     categoria = input("Ingrese la categoria (interior o exterior): ").lower().strip()
     while categoria != 'interior' and categoria != 'exterior':
-        categoria = input("Error! Ingrese una categoria valida (interior o exterior): ").lower().strip()
+        categoria = input(Fore.RED + "Error! Ingrese una categoria valida (interior o exterior): " + Style.RESET_ALL).lower().strip()
     return categoria
 def pedir_repuesto():
     while True:
         try:
             id = int(input("Ingrese el id del repuesto: "))
             while id <= 0:
-                id = int(input(f"Error. Ingrese un numero mayor que 0: "))
+                id = int(input(Fore.RED + "Error. Ingrese un numero mayor que 0: " + Style.RESET_ALL))
         except ValueError:
-            print("Error, ingrese un numero valido!")
+            print(Fore.RED + "Error, ingrese un numero valido!" + Style.RESET_ALL)
+            continue
 
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
