@@ -1,7 +1,3 @@
-#documentar los metodos
-#hacer el README explicando toda la funcionalidad
-#modularizar el codigo
-
 from funciones import *
 
 init() #inicializo colorama

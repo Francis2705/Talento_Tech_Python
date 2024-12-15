@@ -2,6 +2,18 @@ import sqlite3
 
 class Auto:
     def __init__(self, id, patente, marca, modelo, anio, chasis, cantidad_puertas):
+        """
+        Inicializa un objeto Auto.
+
+        Args:
+            id (int): ID del auto en la base de datos.
+            patente (str): Patente del auto.
+            marca (str): Marca del auto.
+            modelo (str): Modelo del auto.
+            anio (int): Año de fabricación del auto.
+            chasis (str): Número de chasis del auto.
+            cantidad_puertas (int): Cantidad de puertas del auto.
+        """
         self.id = id
         self.patente = patente
         self.marca = marca
@@ -10,6 +22,9 @@ class Auto:
         self.chasis = chasis
         self.cantidad_puertas = cantidad_puertas
     def mostrar(self):
+        """
+        Muestra los datos del auto en formato legible para el usuario.
+        """
         info_auto = f'''
 --------------------------------
     ID: {self.id}
@@ -22,6 +37,9 @@ class Auto:
 --------------------------------'''
         print(info_auto)
     def agregar(self):
+        """
+        Agrega el auto a la base de datos.
+        """
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -34,6 +52,16 @@ class Auto:
 
         conexion.close()
     def modificar(self, marca, modelo, anio, chasis, cantidad_puertas):
+        """
+        Modifica los datos del auto en la base de datos.
+
+        Args:
+            marca (str): Nueva marca del auto.
+            modelo (str): Nuevo modelo del auto.
+            anio (int): Nuevo año de fabricación del auto.
+            chasis (str): Nuevo número de chasis del auto.
+            cantidad_puertas (int): Nueva cantidad de puertas del auto.
+        """
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -44,6 +72,9 @@ class Auto:
 
         conexion.close()
     def eliminar(self):
+        """
+        Elimina el auto de la base de datos.
+        """
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -55,6 +86,17 @@ class Auto:
 
 class Repuesto:
     def __init__(self, id, nombre, descripcion, cantidad, precio, categoria):
+        """
+        Inicializa un objeto Repuesto.
+
+        Args:
+            id (int): ID del repuesto en la base de datos.
+            nombre (str): Nombre del repuesto.
+            descripcion (str): Descripción del repuesto.
+            cantidad (int): Cantidad disponible en stock.
+            precio (float): Precio del repuesto.
+            categoria (str): Categoría del repuesto ('interior' o 'exterior').
+        """
         self.id = id
         self.nombre = nombre
         self.descripcion = descripcion
@@ -62,6 +104,9 @@ class Repuesto:
         self.precio = precio
         self.categoria = categoria
     def mostrar(self):
+        """
+        Muestra los datos del repuesto en formato legible para el usuario.
+        """
         info_repuesto = f'''
 --------------------------------
     ID: {self.id}
@@ -73,6 +118,9 @@ class Repuesto:
 --------------------------------'''
         print(info_repuesto)
     def agregar(self):
+        """
+        Agrega el repuesto a la base de datos.
+        """
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -85,6 +133,16 @@ class Repuesto:
 
         conexion.close()
     def modificar(self, nombre, descripcion, cantidad, precio, categoria):
+        """
+        Modifica los datos del repuesto en la base de datos.
+
+        Args:
+            nombre (str): Nuevo nombre del repuesto.
+            descripcion (str): Nueva descripción del repuesto.
+            cantidad (int): Nueva cantidad en stock.
+            precio (float): Nuevo precio del repuesto.
+            categoria (str): Nueva categoría del repuesto ('interior' o 'exterior').
+        """
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
@@ -95,6 +153,9 @@ class Repuesto:
 
         conexion.close()
     def eliminar(self):
+        """
+        Elimina el repuesto de la base de datos.
+        """
         conexion = sqlite3.connect('curso_caba/taller_fmb.db')
         cursor = conexion.cursor()
 
