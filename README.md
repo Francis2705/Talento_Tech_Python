@@ -1,46 +1,85 @@
 ## Talento_Tech_Python
-![talento_tech](curso_caba/talento_tech.png)
-
-
-## Integrantes
-- De Maio, Juan Pablo
-- Martínez Balian, Francisco
-
+![talento_tech](curso_caba/talento_tech.jpg)
 
 ## Proyecto final integrador: taller de autos
-![semaforo](semaforos.png)
+![menu_principal](curso_caba/menu_principal.jpg)
 
 
 ## Descripción
-Este proyecto se creó con la intención de lograr un semáforo el cual sirva para todas las personas, incluidas las no videntes. Para lograrlo utilizamos un piezo, que emite una secuencia de pitidos fuertes cuando el semáforo está en rojo. Hay 6 leds en total, 3 corresponden a un semáforo y los otros 3 a otro. Estos funcionan en conjunto.
+Este programa facilita la gestión de un taller mecánico, permitiendo administrar de manera eficiente autos y repuestos mediante una base de datos SQLite. Ofrece funcionalidades como:
 
-## Función principal: sonar_piezo(int piezo, int veces, int tono)
-Esta funcion se encarga de sonar el piezo cuando corresponde y también de apagarlo cuando no tiene que sonar.
-- PIEZO es un #define que se utiliza para referirnos al piezo como tal (indica en que pin está conectado).
-- 10 son las veces que va a sonar.
-- 1000 es el tono que va a tener.
+- Gestión de Autos: Registro, consulta, modificación y eliminación de autos con información detallada (patente, marca, modelo, año, chasis, cantidad de puertas, etc.).
+- Gestión de Repuestos: Control de stock de repuestos con datos como nombre, descripción, cantidad disponible, precio y categoría (interior o exterior).
+- Reportes: Identificación de repuestos con bajo stock para optimizar la reposición.
+- Validaciones: Verificación de formatos correctos (ej. patente, chasis) y restricciones de datos para asegurar la calidad de la información ingresada.
+- El proyecto utiliza Python y módulos como sqlite3 y colorama para crear una experiencia interactiva y visualmente amigable en consola. 
 
-~~~ C (lenguaje en el que esta escrito)
+## Función principal: pedir_patente(agregar: bool)
+Esta funcion se encarga de pedir la patente del auto y validarla. Dependiendo la llamada de la funcion, se agregará o no un auto.
+- agregar: si esta en True, significa que se va a agregar un auto. Si está en False, se va a modificar o a eliminar uno.
 
-sonar_piezo(PIEZO, 10, 1000); //llamada en la funcion
+~~~ Python (lenguaje en el que esta escrito)
 
-void sonar_piezo(int piezo, int veces, int tono)
-{
-  int tiempo = 250;
+patente = pedir_patente(True) //llamada de la funcion para agregar un auto
 
-  if(tono < 500) //si el sonido es bajo
-  {
-    tiempo = 300;
-  }
-  
-  for(int contador = 0; contador < veces; contador ++)
-  {
-    tone(piezo, tono);
-    Serial.println("Hago sonar");
-    delay(tiempo);
-    noTone(piezo);
-    Serial.println("Dejo de sonar");
-    delay(tiempo);
-  }
-}
+patente = pedir_patente(False) //llamada de la funcion para modificar o eliminar un auto
+
+def pedir_patente(agregar: bool):
+    """
+    Solicita una patente de auto al usuario y valida su formato.
+
+    Args:
+        agregar (bool): Indica si se está agregando un nuevo auto.
+
+    Returns:
+        str or bool: La patente del auto (si es válida) o False si no se encuentra el auto.
+    """
+    if agregar:
+        conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+        cursor = conexion.cursor()
+
+        cursor.execute("SELECT patente FROM Autos") #obtener todas las patentes existentes en la tabla Autos
+        patentes_existentes = {row[0] for row in cursor.fetchall()}
+
+        while True:
+            patente = input("Ingrese la patente del auto: ").strip().upper().replace(" ", "")
+
+            if re.fullmatch(r"[A-Z]{3}\d{3}", patente): #validar formato de 6 caracteres (AAA000)
+                if patente in patentes_existentes:
+                    print(Fore.RED + "Error. La patente ya existe en la base de datos. Intente nuevamente.\n" + Style.RESET_ALL)
+                    continue
+                conexion.close()
+                return patente
+
+            if re.fullmatch(r"[A-Z]{2}\s?\d{3}\s?[A-Z]{2}", patente): #validar formato de 7 caracteres (AA000AA)
+                if patente in patentes_existentes:
+                    print(Fore.RED + "Error. La patente ya existe en la base de datos. Intente nuevamente.\n" + Style.RESET_ALL)
+                    continue
+                conexion.close()
+                return patente
+
+            print(Fore.RED + "Error. Formato inválido. Intente nuevamente.\n" + Style.RESET_ALL)
+    else:
+        while True:
+            patente = input("Ingrese la patente del auto: ").strip().upper().replace(" ", "")
+
+            if re.fullmatch(r"[A-Z]{3}\d{3}", patente): #validar formato de 6 caracteres (AAA000)
+                break
+
+            if re.fullmatch(r"[A-Z]{2}\s?\d{3}\s?[A-Z]{2}", patente): #validar formato de 7 caracteres (AA000AA)
+                break
+
+            print(Fore.RED + "Error. Formato inválido. Intente nuevamente.\n" + Style.RESET_ALL)
+
+        conexion = sqlite3.connect('curso_caba/taller_fmb.db')
+        cursor = conexion.cursor()
+
+        cursor.execute("SELECT * FROM Autos")
+        registros = cursor.fetchall()
+        conexion.close()
+
+        for a in registros:
+            if patente == a[1]:
+                return a
+        return False
 ~~~
