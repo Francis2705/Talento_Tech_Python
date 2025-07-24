@@ -1,4 +1,4 @@
-## Talento_Tech_Python
+## Talento Tech Python
 ![talento_tech](curso_caba/talento_tech.jpg)
 
 ## Proyecto final integrador: taller de autos
